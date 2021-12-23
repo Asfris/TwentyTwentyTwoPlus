@@ -16,6 +16,8 @@ declare(strict_types=1);
 include 'php/version.php';
 include 'php/db.php';
 include 'php/update.php';
+
+// Blocks
 include 'switch/switch.php';
 
 // Get plugin dir url
