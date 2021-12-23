@@ -346,7 +346,6 @@ figcaption {
 */
 .box-br-s {
     overflow: hidden;
-    display: flex;
-    box-shadow: 0 0 5px #7d7d7d40;
+    box-shadow: 0 0 15px #7d7d7d90;
     border-radius: 16px;
 }
