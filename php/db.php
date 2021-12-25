@@ -1,9 +1,21 @@
 <?php
 
+namespace Database;
+
+interface Database
+{
+	public static function create_table(string $name, string $options): void;
+	public function insert(array $data, array $format): void;
+	public function replace(array $data, array $format): void;
+	public function get(string $query);
+	public function update(array $data, array $where): void;
+}
+
 /**
  * db
  */
-class Db {
+class Db implements Database
+{
 
 	/**
 	 * Table name for query
@@ -17,7 +29,7 @@ class Db {
 
 	/**
 	 * When object created
-	 * @param table
+	 * @param string $table
 	 * @since 0.1.0
 	 */
 	function __construct(string $table) {
@@ -29,8 +41,8 @@ class Db {
 
 	/**
 	 * Create a table
-	 * @param name Name of table
-	 * @param options Options of Table. for example -> name, age ...
+	 * @param string $name Name of table
+	 * @param string $options Options of Table. for example -> name, age ...
 	 * @since 0.0.1
 	 */
 	public static function create_table(string $name, string $options): void {
@@ -47,12 +59,13 @@ class Db {
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name ( $options ) $charset_collate;";
 		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
+		dbDelta($sql);
 	}
-	
+
 	/**
 	 * Inserts to table
-	 * @param data data to insert
+	 * @param array $data
+	 * @param array $format
 	 * @return void
 	 * @since 0.0.1
 	 * @since 0.1.0 Code fixed
@@ -67,8 +80,8 @@ class Db {
 
 	/**
 	 * Replace to table
-	 * @param data data to replace
-	 * @param format format of data 
+	 * @param array $data data to replace
+	 * @param array $format format of data
 	 * @return void
 	 * @since 0.0.1
 	 * @since 0.1.0 Code fixed
@@ -83,21 +96,20 @@ class Db {
 
 	/**
 	 * Get result from db
-	 * @param query
+	 * @param string $query
 	 * @return array|object|null
 	 * @since 0.0.1
 	 * @since 0.1.0 Code fixed
+	 * @since 0.1.3 Removed Unnecessary variable
 	 */
 	public function get(string $query) {
-		$result = $this->db->get_results($query);
-
-		return $result;
+		return $this->db->get_results($query);
 	}
 
 	/**
 	 * Update data in table
-	 * @param data
-	 * @param where
+	 * @param array $data
+	 * @param array $where
 	 * @since 0.0.2
 	 * @since 0.1.0 Code fixed
 	 * @return void
@@ -110,5 +122,3 @@ class Db {
 		$this->db->update($table, $data, $where);
 	}
 }
-
-?>
