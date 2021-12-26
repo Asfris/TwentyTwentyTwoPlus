@@ -6,44 +6,52 @@ use ErrorHandle\Error;
 
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
 
-/**
- * Covert mb to bytes
- * @param int $mb
- * @return int
- * @since 0.1.3
- */
-function megabyteToByte(int $mb): int {
-    return $mb * 1000000;
+trait Converter
+{
+    /**
+     * Convert mb to bytes
+     * @param int $mb
+     * @return int
+     * @since 0.1.3
+     */
+    private function megabyteToByte(int $mb): int
+    {
+        return $mb * 1000000;
+    }
 }
 
-/**
- * Sends get request with cURL
- * @since 0.1.0
- */
-function send_get(string $url): bool | string {
-    $userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0';
+trait Request
+{
+    /**
+     * Sends get request with cURL
+     * @since 0.1.0
+     * @since 0.1.4 Added inside Request trait
+     */
+    private function send_get(string $url): bool | string {
+        $userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0';
 
-    //Initialize cURL.
-    $ch = curl_init();
+        //Initialize cURL.
+        $ch = curl_init();
 
-    curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
+        curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
 
-    //Set the URL that you want to GET by using the CURLOPT_URL option.
-    curl_setopt($ch, CURLOPT_URL, $url);
+        //Set the URL that you want to GET by using the CURLOPT_URL option.
+        curl_setopt($ch, CURLOPT_URL, $url);
 
-    //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    //Set CURLOPT_FOLLOWLOCATION to true to follow redirects.
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        //Set CURLOPT_FOLLOWLOCATION to true to follow redirects.
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
-    //Execute the request.
-    $data = curl_exec($ch);
+        //Execute the request.
+        $data = curl_exec($ch);
 
-    //Close the cURL handle.
-    curl_close($ch);
+        //Close the cURL handle.
+        curl_close($ch);
 
-    return $data;
+        return $data;
+    }
 }
 
 /**
@@ -129,6 +137,8 @@ class AssetFile {
  * Sends get request to api, and recives response data
  */
 class Get {
+    use Request;
+
     /**
      * Url of api
      */
@@ -150,7 +160,7 @@ class Get {
      * @since 0.1.3 Removed Unnecessary variable
      */
     public function get_data(string $router) {
-        return send_get($this->url . $router);
+        return $this->send_get($this->url . $router);
     }
 
     /**
@@ -160,7 +170,7 @@ class Get {
      * @return string[] decoded json
      */
     public function get_data_as_json(string $router) {
-        $response = send_get($this->url . $router);
+        $response = $this->send_get($this->url . $router);
 
         if (!$response) return array("message" => "Error: Response is null");
 
@@ -244,6 +254,8 @@ class GithubApi {
  * Handle plugin update
  */
 class Update {
+    use Converter;
+
     /**
      * Current version of plugin
      */
@@ -304,7 +316,7 @@ class Update {
         $folder_dir_len = count($folder_dir) - 2;
         $result_folder = $folder_dir[$folder_dir_len];
 
-        $asset = $this->api->get_latest_release_asset(0, megabyteToByte(ASSET_FILE_SIZE_LIMIT));
+        $asset = $this->api->get_latest_release_asset(0, $this->megabyteToByte(ASSET_FILE_SIZE_LIMIT));
 
         // Bug fixed : https://github.com/Asfris/TwentyTwentyTwoPlus/issues/23
         $newFilePath = ABSPATH . "wp-content/plugins/" . $result_folder . "/tttp.zip";
