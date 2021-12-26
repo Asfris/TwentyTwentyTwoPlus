@@ -61,14 +61,14 @@ class Db implements Database
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name ( $options ) $charset_collate;";
 		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        try
-        {
-            dbDelta($sql);
-        }
-        catch (Error $ex)
-        {
-            echo $ex->fullErrorMessage();
-        }
+		try
+		{
+		    dbDelta($sql);
+		}
+		catch (Error $ex)
+		{
+		    echo $ex->fullErrorMessage();
+		}
 	}
 
 	/**
@@ -84,15 +84,15 @@ class Db implements Database
 		// get table
 		$table = $this->db->prefix . $this->table_name;
 
-        try
-        {
-            // Insert to table
-            $this->db->insert($table, $data, $format);
-        }
-		catch (Error $ex)
-        {
-            echo $ex->fullErrorMessage();
-        }
+		try
+		{
+		    // Insert to table
+		    $this->db->insert($table, $data, $format);
+		}
+			catch (Error $ex)
+		{
+		    echo $ex->fullErrorMessage();
+		}
 	}
 
 	/**
@@ -108,15 +108,15 @@ class Db implements Database
 		// get table
 		$table = $this->db->prefix . $this->table_name;
 
-        try
-        {
-            // Replace data
-            $this->db->replace($table, $data, $format);
-        }
-        catch (Error $ex)
-        {
-            echo $ex->fullErrorMessage();
-        }
+		try
+		{
+		    // Replace data
+		    $this->db->replace($table, $data, $format);
+		}
+		catch (Error $ex)
+		{
+		    echo $ex->fullErrorMessage();
+		}
 	}
 
 	/**
@@ -137,21 +137,21 @@ class Db implements Database
 	 * @param array $where
 	 * @since 0.0.2
 	 * @since 0.1.0 Code fixed
-     * @since 0.1.3 Error handle
+     	 * @since 0.1.3 Error handle
 	 * @return void
 	 */
 	public function update(array $data, array $where): void {
 		// get table
 		$table = $this->db->prefix . $this->table_name;
 
-        try
-        {
-            // Update data
-            $this->db->update($table, $data, $where);
-        }
-        catch (Error $ex)
-        {
-            echo $ex->fullErrorMessage();
-        }
+		try
+		{
+		    // Update data
+		    $this->db->update($table, $data, $where);
+		}
+		catch (Error $ex)
+		{
+		    echo $ex->fullErrorMessage();
+		}
 	}
 }
