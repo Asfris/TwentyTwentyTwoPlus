@@ -2,6 +2,8 @@
 
 namespace Database;
 
+use ErrorHandle\Error;
+
 interface Database
 {
 	public static function create_table(string $name, string $options): void;
@@ -47,7 +49,7 @@ class Db implements Database
 	 */
 	public static function create_table(string $name, string $options): void {
 		// Use Wordpress db var as global
-		// Code refrence : https://developer.wordpress.org/reference/classes/wpdb/
+		// Code reference : https://developer.wordpress.org/reference/classes/wpdb/
 		global $wpdb;
 		
 		$charset_collate = $wpdb->get_charset_collate();
@@ -59,7 +61,14 @@ class Db implements Database
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name ( $options ) $charset_collate;";
 		
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta($sql);
+        try
+        {
+            dbDelta($sql);
+        }
+        catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+        }
 	}
 
 	/**
@@ -69,13 +78,21 @@ class Db implements Database
 	 * @return void
 	 * @since 0.0.1
 	 * @since 0.1.0 Code fixed
+     * @since 0.1.3 Error handle
 	 */
 	public function insert(array $data, array $format): void {
 		// get table
 		$table = $this->db->prefix . $this->table_name;
 
-		// Insert to table
-		$this->db->insert($table, $data, $format);
+        try
+        {
+            // Insert to table
+            $this->db->insert($table, $data, $format);
+        }
+		catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+        }
 	}
 
 	/**
@@ -85,13 +102,21 @@ class Db implements Database
 	 * @return void
 	 * @since 0.0.1
 	 * @since 0.1.0 Code fixed
+     * @since 0.1.3 Error handle
 	 */
 	public function replace(array $data, array $format): void {
 		// get table
 		$table = $this->db->prefix . $this->table_name;
 
-		// Replace data
-		$this->db->replace($table, $data, $format);
+        try
+        {
+            // Replace data
+            $this->db->replace($table, $data, $format);
+        }
+        catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+        }
 	}
 
 	/**
@@ -112,13 +137,21 @@ class Db implements Database
 	 * @param array $where
 	 * @since 0.0.2
 	 * @since 0.1.0 Code fixed
+     * @since 0.1.3 Error handle
 	 * @return void
 	 */
 	public function update(array $data, array $where): void {
 		// get table
 		$table = $this->db->prefix . $this->table_name;
-		
-		// Update data
-		$this->db->update($table, $data, $where);
+
+        try
+        {
+            // Update data
+            $this->db->update($table, $data, $where);
+        }
+        catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+        }
 	}
 }
