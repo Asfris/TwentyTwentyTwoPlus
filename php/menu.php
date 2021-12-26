@@ -1,74 +1,86 @@
 <?php
-    /**
-     * Set OR replace checkbox value to db
-     * @since 0.1.0
-     * @return void
-     */
-    function set_checkbox(string $param) {
-        global $db;
 
-        $data = $db->get("SELECT value FROM wp_tttp WHERE param='$param';");
-        // If data exists
-        if ($data) {
-            $value = isset($_POST["$param"]);
-            $db->update(array("value" => $value), array("param" => $param));
-        }
-        else {
-            $db->insert(array("param" => $param, "value" => ""), array("%s", "%s"));
-        }
-    }
+global $db;
+$result =  $db->get("SELECT * FROM wp_tttp;");
 
-    /**
-     * Get checkbox value from db
-     * @since 0.1.0
-     * @return string
-     */
-    function get_checkbox(string $param): string {
-        global $db;
-
-        $result = $db->get("SELECT value FROM wp_tttp WHERE param='$param';");
-
-        if ($result) {
-            return match ($result[0]->value) {
-                "1"  => 'checked',
-                "" => '',
-            };
-        }
-        else {
-            return '';
-        }
-    }
-    
-    global $update;
-    // Check update
-    [$ver, $check] = $update->check_update();
-    if ($check) echo "<div class='message'>New update is available -> $ver</div>";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST")
+if (!$result) {
+    // that means table not filled by default data
+    foreach (DB_TABLE_PARAMS as $param)
     {
-        if (isset($_POST['update'])) {
-            if ($check) $update->upgrade();
-            else echo "<div class='message'>You are using latest version of plugin.</div>";
-        }
-        else {
-            set_checkbox("checkSecondMenu");
-            set_checkbox("darkMode");
-            set_checkbox("postImage");
+        $db->insert(array("param" => $param, "value" => ""), array("%s", "%s"));
+    }
+}
+
+/**
+ * Set OR replace checkbox value to db
+ * @since 0.1.0
+ * @return void
+ */
+function set_checkbox(string $param) {
+    global $db;
+
+    $data = $db->get("SELECT value FROM wp_tttp WHERE param='$param';");
+    // If data exists
+    if ($data) {
+        $value = isset($_POST["$param"]);
+        $db->update(array("value" => $value), array("param" => $param));
+    }
+}
+
+/**
+ * Get checkbox value from db
+ * @since 0.1.0
+ * @return string
+ */
+function get_checkbox(string $param): string {
+    global $db;
+
+    $result = $db->get("SELECT value FROM wp_tttp WHERE param='$param';");
+
+    if ($result) {
+        return match ($result[0]->value) {
+            "1"  => 'checked',
+            "" => '',
+        };
+    }
+    else {
+        return '';
+    }
+}
+
+global $update;
+// Check update
+[$ver, $check] = $update->check_update();
+if ($check) echo "<div class='message'>New update is available -> $ver</div>";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+    if (isset($_POST['update'])) {
+        if ($check) $update->upgrade();
+        else echo "<div class='message'>You are using latest version of plugin.</div>";
+    }
+    else {
+        foreach (DB_TABLE_PARAMS as $param) {
+            set_checkbox($param);
         }
     }
+}
 
-    $second_menu = get_checkbox("checkSecondMenu");
-    $dark_mode = get_checkbox("darkMode");
-    $post_image = get_checkbox("postImage");
+/**
+ * Example Result : array(3) { [0]=> string(0) "" [1]=> string(7) "checked" [2]=> string(0) "" }
+ */
+$result_params_data = array();
+
+foreach (DB_TABLE_PARAMS as $param) {
+    $data = get_checkbox($param);
+    array_push($result_params_data, $data);
+}
+
 ?>
 
-<html>
+<html lang="en">
     <style>
-        .hidden {
-            display: none;
-        }
-
-		    main form {
+        main form {
 		        display: flex;
 		        flex-direction: column;
             align-items: baseline;
@@ -130,7 +142,7 @@
                             فهرست دوم
                         </td>
                         <td>
-                            <input type="checkbox" name="checkSecondMenu" value="checked" <?= $second_menu ?>>
+                            <input type="checkbox" name="checkSecondMenu" value="checked" <?= $result_params_data[0] ?>>
                         </td>
                     </tr>
                     <tr>
@@ -138,7 +150,7 @@
                             حالت تاریک
                         </td>
                         <td>
-                            <input type="checkbox" name="darkMode" value="checked" <?= $dark_mode ?>>
+                            <input type="checkbox" name="darkMode" value="checked" <?= $result_params_data[1] ?>>
                         </td>
                     </tr>
                     <tr>
@@ -146,7 +158,7 @@
                             تصویر شاخص نوشته ها
                         </td>
                         <td>
-                            <input type="checkbox" name="postImage" value="checked" <?= $post_image ?>>
+                            <input type="checkbox" name="postImage" value="checked" <?= $result_params_data[2] ?>>
                         </td>
                     </tr>
                 </tbody>
