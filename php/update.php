@@ -1,5 +1,9 @@
 <?php
 
+namespace Update;
+
+use ErrorHandle\Error;
+
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
 
 /**
@@ -46,6 +50,13 @@ function send_get(string $url): bool | string {
  * Github Asset Files
  */
 class AssetFile {
+
+    /**
+     * Downloaded file
+     * @var $file
+     */
+    private $dFile;
+
     /**
      * Address of file
      * @var string
@@ -76,13 +87,39 @@ class AssetFile {
     /**
      * Download File
      * @since 0.1.0
-     * @return int Content of file
+     * @since 0.1.3
+     * @return bool
      */
-    public function download(string $outputAddr): bool {
-        $file = download_url($this->addr);
+    public function download(): bool {
+        try
+        {
+            $this->dFile = download_url($this->addr);
+        }
+        catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+            return false;
+        }
 
-        copy( $file, $outputAddr );
-        @unlink( $file );
+        return true;
+    }
+
+    /**
+     * @param string $addr
+     * @since 0.1.3
+     * @return bool
+     */
+    public function save(string $addr): bool {
+        try
+        {
+            copy( $this->dFile , $addr );
+            @unlink( $this->dFile );
+        }
+        catch (Error $ex)
+        {
+            echo $ex->fullErrorMessage();
+            return false;
+        }
 
         return true;
     }
@@ -99,7 +136,7 @@ class Get {
 
     /**
      * When class created
-     * @param url Pass main url of api
+     * @param string $url Pass main url of api
      * @since 0.1.0
      */
     function __construct(string $url) {
@@ -108,20 +145,19 @@ class Get {
 
     /**
      * Send get request to api router and recives data
-     * @param router Addr to send get request. example: github.com/sampleRouter
+     * @param string $router Addr to send get request. example: github.com/sampleRouter
      * @since 0.1.0
+     * @since 0.1.3 Removed Unnecessary variable
      */
     public function get_data(string $router) {
-        $response = send_get($this->url . $router);
-
-        return $response;
+        return send_get($this->url . $router);
     }
 
     /**
      * Send get request to api router and recives data and decoded in json
-     * @param router Addr to send get request. example: github.com/sampleRouter
+     * @param string $router Addr to send get request. example: github.com/sampleRouter
      * @since 0.1.0
-     * @return object decoded json
+     * @return string[] decoded json
      */
     public function get_data_as_json(string $router) {
         $response = send_get($this->url . $router);
@@ -167,9 +203,10 @@ class GithubApi {
     }
 
     /**
-     * Get repository releases detais as object
+     * Get repository releases detail as object
      * @since 0.1.0
-     * @return object response or error
+     * @since 0.1.3 Removed Unnecessary variable
+     * @return string[] response or error
      */
     public function get_repo_releases() {
         $username = $this->username;
@@ -177,9 +214,7 @@ class GithubApi {
 
         if(empty($username) && empty($repo)) return array("message" => "Error");
 
-        $response = $this->get->get_data_as_json("/repos/$this->username/$this->repository/releases");
-
-        return $response;
+        return $this->get->get_data_as_json("/repos/$this->username/$this->repository/releases");
     }
 
     /**
@@ -221,7 +256,9 @@ class Update {
 
     /**
      * When class created
-     * @param current_version pass current version of plugin
+     * @param string $current_version pass current version of plugin
+     * @param string $username
+     * @param string $repo
      * @since 0.1.0
      */
     function __construct(string $current_version, string $username, string $repo) {
@@ -243,9 +280,7 @@ class Update {
     }
 
     /**
-     * Get latest version from GithubApi and return object (message)
-     * @param username Github username
-     * @param repo Github repository name
+     * Get the latest version from GithubApi and return object (message)
      * @since 0.1.0
      * @return array 
      */
@@ -275,7 +310,8 @@ class Update {
         $newFilePath = ABSPATH . "wp-content/plugins/" . $result_folder . "/tttp.zip";
         $pluginPath  = ABSPATH . "wp-content/plugins/" . $result_folder;
 
-        $file = $asset->download($newFilePath);
+        // Download asset file
+        $asset->download($newFilePath);
 
         $zip = new ZipArchive;
 
@@ -294,5 +330,3 @@ class Update {
         echo "Updated.\n";
     }
 }
-
-?>
