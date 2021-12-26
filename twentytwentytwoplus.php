@@ -23,11 +23,11 @@ include 'switch/switch.php';
 // Get plugin dir url
 $dir = plugin_dir_url(__FILE__);
 
-const INFO = "INFO";
 const DB_TABLE = "tttp";
+const DB_TABLE_PARAMS = ["checkSecondMenu", "darkMode", "postImage"];
 
-$db = new Db(DB_TABLE);
-$update = new Update(PLUGIN_VERSION, "Asfris", "TwentyTwentyTwoPlus");
+$db = new Database\Db(DB_TABLE);
+$update = new Update\Update(PLUGIN_VERSION, "Asfris", "TwentyTwentyTwoPlus");
 
 /**
  * Register Menu
@@ -62,6 +62,8 @@ function menu_page(): void {
 /**
  * Enject style
  * Enqueue Css to theme
+ * @param string $style_name
+ * @param string $css_file_path
  * @return void
  * @since 0.0.1
  */
@@ -78,14 +80,15 @@ function main() {
     global $dir;
 
     // Create table in database
-	Db::create_table(DB_TABLE,
+	Database\Db::create_table(DB_TABLE,
 		"
-            id INT PRIMARY KEY AUTO_INCREMENT,
-			param VARCHAR(100),
+            id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+			param VARCHAR(100) NOT NULL,
 			value VARCHAR(200)
 		"
 	);
-    // Enject css to theme
+
+    // Inject css to theme
     inject_style('TwentyTwentyTwoPlusStyle', $dir . 'dist/main.bundle.css');
 }
 
