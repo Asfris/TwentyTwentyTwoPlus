@@ -250,11 +250,30 @@ class GithubApi {
     }
 }
 
+trait Path
+{
+    /**
+     * Returns the latest folder name of path
+     * example path -> localhost:8080/addr/addr/[PLUGIN_NAME]
+     * @param string $path
+     * @since 0.1.4
+     * @return string
+     */
+    private function lastFolderName(string $path): string
+    {
+        $folder_dir = preg_split("#/#", $path);
+        $folder_dir_len = count($folder_dir) - 2;
+
+        return $folder_dir[$folder_dir_len];
+    }
+}
+
 /**
  * Handle plugin update
  */
 class Update {
     use Converter;
+    use Path;
 
     /**
      * Current version of plugin
@@ -310,11 +329,7 @@ class Update {
     public function upgrade(): void {
         global $dir; // Plugin dir
 
-        // Get current plugin folder name
-        // Split DIR var. example url -> localhost:8080/addr/addr/[PLUGIN_NAME]
-        $folder_dir = preg_split("#/#", $dir);
-        $folder_dir_len = count($folder_dir) - 2;
-        $result_folder = $folder_dir[$folder_dir_len];
+        $result_folder = $this->lastFolderName($dir);
 
         $asset = $this->api->get_latest_release_asset(0, $this->megabyteToByte(ASSET_FILE_SIZE_LIMIT));
 
@@ -322,8 +337,9 @@ class Update {
         $newFilePath = ABSPATH . "wp-content/plugins/" . $result_folder . "/tttp.zip";
         $pluginPath  = ABSPATH . "wp-content/plugins/" . $result_folder;
 
-        // Download asset file
-        $asset->download($newFilePath);
+        // Download and save asset file
+        $asset->download();
+        $asset->save($newFilePath);
 
         $zip = new ZipArchive;
 
@@ -332,8 +348,15 @@ class Update {
         if ($res === TRUE) {
             echo "Zip file opened.\n";
             echo "Zip file extracted.\n";
-            $zip->extractTo($pluginPath);
-            $zip->close();
+            try
+            {
+                $zip->extractTo($pluginPath);
+                $zip->close();
+            }
+            catch(Error $ex)
+            {
+                echo $ex->fullErrorMessage();
+            }
         }
         else {
             echo "ERROR :" . $res;
