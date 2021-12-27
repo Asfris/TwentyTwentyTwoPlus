@@ -16,10 +16,6 @@ Build and watch
 
 `npm start`
 
-# Css classes
-
-`.box-br-s` [ Box ] -> Border radius and shadow
-
 # Db table diagram
 
 Table name : wp_tttp
