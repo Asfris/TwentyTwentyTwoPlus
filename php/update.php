@@ -3,6 +3,7 @@
 namespace Update;
 
 use ErrorHandle\Error;
+use ZipArchive;
 
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
 
