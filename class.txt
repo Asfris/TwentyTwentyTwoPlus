@@ -1,0 +1,11 @@
+.box-br-s   --->   Adds shadow and border radius (br=16px)
+
+.box-br     --->   Adds border radius (br=16px)
+
+.box-s      --->   Adds shadow (s=[ 0 0 15px #7d7d7d90 ])
+
+.box-t      --->   Adds transition (t=[ all 0.2s ])
+
+.box-m-u    --->   Adds transform -1
+
+.box-m-u$v  --->   Adds transform -$v, $v= 2 | 3 | 4
