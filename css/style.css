@@ -341,11 +341,49 @@ figcaption {
     Custom classes
 */
 
-/*
-    Add shadow and radius to box
-*/
 .box-br-s {
     overflow: hidden;
-    box-shadow: 0 0 15px #7d7d7d90;
     border-radius: 16px;
+    box-shadow: 0 0 15px #7d7d7d90;
+}
+
+/*
+    Add radius to box
+*/
+.box-br {
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+/*
+    Adds shadow to box
+ */
+.box-s {
+    box-shadow: 0 0 15px #7d7d7d90;
+}
+
+/*
+    Adds transition to box
+ */
+.box-t {
+    transition: all 0.2s;
+}
+
+/*
+    Move box up 1 px
+ */
+.box-m-u:hover {
+    transform: translateY(-1px);
+}
+
+.box-m-u2:hover {
+    transform: translateY(-2px);
+}
+
+.box-m-u3:hover {
+    transform: translateY(-3px);
+}
+
+.box-m-u4:hover {
+    transform: translateY(-4px);
 }
