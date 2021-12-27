@@ -1,4 +1,6 @@
 ## TwentyTwentyTwo plus
+
+### Css Class
 .box-br-s   --->   Adds shadow and border radius (br=16px)
 
 .box-br     --->   Adds border radius (br=16px)
