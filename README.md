@@ -2,6 +2,8 @@
 
 A better version of wordpress twentytwentytwo theme.
 
+Css classes : [class.txt](https://asfris.github.io/TwentyTwentyTwoPlus/class.txt)
+
 # Build project
 
 install Dependencies
