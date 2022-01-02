@@ -3,6 +3,7 @@
 namespace Update;
 
 use ErrorHandle\Error;
+use Exception;
 use ZipArchive;
 
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
@@ -21,37 +22,132 @@ trait Converter
     }
 }
 
-trait Request
+trait CurlOptions
 {
+    private $curl;
+
     /**
-     * Sends get request with cURL
-     * @since 0.1.0
-     * @since 0.1.4 Added inside Request trait
+     * Init Curl
+     * @param string $url
+     * @return void
      */
-    private function send_get(string $url): bool | string {
-        $userAgent = 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0';
+    private function cInit(): void {
+        $this->curl = curl_init();
+    }
+    
+    /**
+     * setOption
+     * @param int $option
+     * @param int $value
+     * @return void
+     */
+    private function cSet_option (int $option, mixed $value): void {
+        curl_setopt($this->curl, $option, $value);
+    }
 
-        //Initialize cURL.
-        $ch = curl_init();
+    /**
+     * @return mixed Returns response of request
+     */
+    private function cExec(): mixed {
+        return curl_exec($this->curl);
+    }
+    
+    /**
+     * Close curl session
+     * @return void
+     */
+    private function cClose(): void {
+        curl_close($this->curl);
+    }
+}
 
-        curl_setopt( $ch, CURLOPT_USERAGENT, $userAgent );
+class Request
+{
+    use CurlOptions;
+    
+    /**
+     * Headers
+     */
+	private array $header = array();
 
-        //Set the URL that you want to GET by using the CURLOPT_URL option.
-        curl_setopt($ch, CURLOPT_URL, $url);
+    /**
+     * Curl opt
+     */
+    private array $curlOptions;
 
-        //Set CURLOPT_RETURNTRANSFER so that the content is returned as a variable.
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    /**
+     * Method of request
+     */
+    private string $method;
 
-        //Set CURLOPT_FOLLOWLOCATION to true to follow redirects.
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    /**
+     * Body of request. if method is POST
+     */
+    private $body;
 
-        //Execute the request.
-        $data = curl_exec($ch);
+    function __construct() {
+        $this->cInit();
+    }
 
-        //Close the cURL handle.
-        curl_close($ch);
+    /**
+     * Set request target url
+     * @param string $url
+     * @return void
+     */
+    public function set_url(string $url): void {
+        $this->cSet_option(CURLOPT_URL, $url);
+    }
 
-        return $data;
+    /**
+     * Set request method
+     * @param string $methdo
+     * @return void
+     */
+    public function set_method(string $method): void {
+        if ($method !== "POST" && $method !== "GET" && $method !== "PUT" && $method !== "DELETE")
+            throw new Exception($method . " not defined in methods list.");
+
+        $this->method = $method;
+    }
+
+    /**
+     * Set request body.
+     * @param mixin $data
+     * @return void
+     */
+    public function set_body($data): void {
+        $this->body = $data;
+    }
+
+    /**
+     * Add new header.
+     * @param string $param
+     * @param string $value
+     * @return void
+     */
+    public function push_header(string $param): void {
+        array_push($this->header, $param);
+    }
+
+    /**
+     * Finalize request
+     */
+    public function finish(): mixed {
+        // Set http headers
+        $this->cSet_option(CURLOPT_HTTPHEADER, $this->header);
+
+        if ($this->method == "POST") {
+            $this->cSet_option(CURLOPT_POST, true);
+            $this->cSet_option(CURLOPT_POSTFIELDS, $this->body);
+        }
+
+        $this->cSet_option(CURLOPT_RETURNTRANSFER, true);
+        
+        $response = $this->cExec();
+        
+        $this->cClose();
+        
+        return $response;
     }
 }
 
@@ -138,12 +234,15 @@ class AssetFile {
  * Sends get request to api, and recives response data
  */
 class Get {
-    use Request;
-
     /**
-     * Url of api
+     * @var stirng $url of api
      */
     private string $url;
+
+    /**
+     * @var Request $request Request Handler
+     */
+    private Request $request;
 
     /**
      * When class created
@@ -152,6 +251,10 @@ class Get {
      */
     function __construct(string $url) {
         $this->url = $url;
+        
+        $this->request = new Request();
+        $this->request->set_method("GET");
+        $this->request->push_header("User-Agent: Nothing");
     }
 
     /**
@@ -161,19 +264,19 @@ class Get {
      * @since 0.1.3 Removed Unnecessary variable
      */
     public function get_data(string $router) {
-        return $this->send_get($this->url . $router);
+        $this->request->set_url($this->url . $router);
+        return $this->request->finish();
     }
 
     /**
      * Send get request to api router and recives data and decoded in json
      * @param string $router Addr to send get request. example: github.com/sampleRouter
      * @since 0.1.0
-     * @return string[] decoded json
      */
     public function get_data_as_json(string $router) {
-        $response = $this->send_get($this->url . $router);
+        $response = $this->get_data($router);
 
-        if (!$response) return array("message" => "Error: Response is null");
+        if (!$response) throw new Error("Response is null");
 
         return json_decode($response);
     }
@@ -217,7 +320,6 @@ class GithubApi {
      * Get repository releases detail as object
      * @since 0.1.0
      * @since 0.1.3 Removed Unnecessary variable
-     * @return string[] response or error
      */
     public function get_repo_releases() {
         $username = $this->username;
