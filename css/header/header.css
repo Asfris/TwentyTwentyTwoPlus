@@ -20,7 +20,7 @@ body .wp-site-blocks header {
 
 /* @since 0.1.5 */
 body .wp-site-blocks header div * {
-    justify-content: space-around;
+    justify-content: space-around !important;
 }
 
 @media (min-width: 600px) {
