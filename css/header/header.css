@@ -9,16 +9,24 @@
     Header
 */
 body .wp-site-blocks header {
-    height: 70px;
+    /* @since 0.1.5 : Bug fix */
+    min-height: 70px;
+    padding: 0.8rem;
+
     box-shadow: 0 7px 8px 0 rgb(0 0 0 / 4%);
     background: var(--wp--preset--color--block--background);
     display: flex;
 }
 
+/* @since 0.1.5 */
+body .wp-site-blocks header div * {
+    justify-content: space-around;
+}
+
 @media (min-width: 600px) {
     body .wp-site-blocks header .wp-block-group.alignwide {
         justify-content: space-around !important;
-        gap: 18rem !important;
+        /* gap: 3rem !important; */
     }
 }
 
