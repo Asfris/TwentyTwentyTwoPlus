@@ -235,6 +235,12 @@ class AssetFile {
  */
 class Get {
     /**
+     * @since 0.1.5
+     * @var string USER_AGENT
+     */
+    private const USER_AGENT = "Nothing";
+
+    /**
      * @var stirng $url of api
      */
     private string $url;
@@ -254,7 +260,7 @@ class Get {
         
         $this->request = new Request();
         $this->request->set_method("GET");
-        $this->request->push_header("User-Agent: Nothing");
+        $this->request->push_header("User-Agent: " . self::USER_AGENT);
     }
 
     /**
