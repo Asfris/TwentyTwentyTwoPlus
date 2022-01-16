@@ -18,6 +18,6 @@ class Error extends Exception implements ErrorI
     public function fullErrorMessage(): string
     {
         return 'Error caught on line ' . $this->getLine() . ' in ' . $this->getFile()
-                . ': <b>' . $this->getMessage() . '</b> is no valid E-Mail address';
+            . ': <b>' . $this->getMessage() . '</b> is no valid E-Mail address';
     }
 }
