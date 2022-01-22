@@ -31,32 +31,36 @@ trait CurlOptions
      * @param string $url
      * @return void
      */
-    private function cInit(): void {
+    private function cInit(): void
+    {
         $this->curl = curl_init();
     }
-    
+
     /**
      * setOption
      * @param int $option
      * @param int $value
      * @return void
      */
-    private function cSet_option (int $option, mixed $value): void {
+    private function cSet_option(int $option, mixed $value): void
+    {
         curl_setopt($this->curl, $option, $value);
     }
 
     /**
      * @return mixed Returns response of request
      */
-    private function cExec(): mixed {
+    private function cExec(): mixed
+    {
         return curl_exec($this->curl);
     }
-    
+
     /**
      * Close curl session
      * @return void
      */
-    private function cClose(): void {
+    private function cClose(): void
+    {
         curl_close($this->curl);
     }
 }
@@ -64,11 +68,11 @@ trait CurlOptions
 class Request
 {
     use CurlOptions;
-    
+
     /**
      * Headers
      */
-	private array $header = array();
+    private array $header = array();
 
     /**
      * Curl opt
@@ -85,7 +89,8 @@ class Request
      */
     private $body;
 
-    function __construct() {
+    function __construct()
+    {
         $this->cInit();
     }
 
@@ -94,7 +99,8 @@ class Request
      * @param string $url
      * @return void
      */
-    public function set_url(string $url): void {
+    public function set_url(string $url): void
+    {
         $this->cSet_option(CURLOPT_URL, $url);
     }
 
@@ -103,7 +109,8 @@ class Request
      * @param string $methdo
      * @return void
      */
-    public function set_method(string $method): void {
+    public function set_method(string $method): void
+    {
         if ($method !== "POST" && $method !== "GET" && $method !== "PUT" && $method !== "DELETE")
             throw new Exception($method . " not defined in methods list.");
 
@@ -115,7 +122,8 @@ class Request
      * @param mixin $data
      * @return void
      */
-    public function set_body($data): void {
+    public function set_body($data): void
+    {
         $this->body = $data;
     }
 
@@ -125,28 +133,31 @@ class Request
      * @param string $value
      * @return void
      */
-    public function push_header(string $param): void {
+    public function push_header(string $param): void
+    {
         array_push($this->header, $param);
     }
 
     /**
      * Finalize request
      */
-    public function finish(): mixed {
+    public function finish(): mixed
+    {
         // Set http headers
         $this->cSet_option(CURLOPT_HTTPHEADER, $this->header);
 
-        if ($this->method == "POST") {
+        if ($this->method == "POST")
+        {
             $this->cSet_option(CURLOPT_POST, true);
             $this->cSet_option(CURLOPT_POSTFIELDS, $this->body);
         }
 
         $this->cSet_option(CURLOPT_RETURNTRANSFER, true);
-        
+
         $response = $this->cExec();
-        
+
         $this->cClose();
-        
+
         return $response;
     }
 }
@@ -154,7 +165,8 @@ class Request
 /**
  * Github Asset Files
  */
-class AssetFile {
+class AssetFile
+{
 
     /**
      * Downloaded file
@@ -183,7 +195,8 @@ class AssetFile {
     /**
      * @since 0.1.0
      */
-    function __construct(string $addr, string $content_type, int $size) {
+    function __construct(string $addr, string $content_type, int $size)
+    {
         $this->addr = $addr;
         $this->content_type = $content_type;
         $this->size = $size;
@@ -195,7 +208,8 @@ class AssetFile {
      * @since 0.1.3
      * @return bool
      */
-    public function download(): bool {
+    public function download(): bool
+    {
         try
         {
             $this->dFile = download_url($this->addr);
@@ -214,11 +228,12 @@ class AssetFile {
      * @since 0.1.3
      * @return bool
      */
-    public function save(string $addr): bool {
+    public function save(string $addr): bool
+    {
         try
         {
-            copy( $this->dFile , $addr );
-            @unlink( $this->dFile );
+            copy($this->dFile, $addr);
+            @unlink($this->dFile);
         }
         catch (Error $ex)
         {
@@ -233,7 +248,8 @@ class AssetFile {
 /**
  * Sends get request to api, and recives response data
  */
-class Get {
+class Get
+{
     /**
      * @since 0.1.5
      * @var string USER_AGENT
@@ -255,9 +271,10 @@ class Get {
      * @param string $url Pass main url of api
      * @since 0.1.0
      */
-    function __construct(string $url) {
+    function __construct(string $url)
+    {
         $this->url = $url;
-        
+
         $this->request = new Request();
         $this->request->set_method("GET");
         $this->request->push_header("User-Agent: " . self::USER_AGENT);
@@ -269,7 +286,8 @@ class Get {
      * @since 0.1.0
      * @since 0.1.3 Removed Unnecessary variable
      */
-    public function get_data(string $router) {
+    public function get_data(string $router)
+    {
         $this->request->set_url($this->url . $router);
         return $this->request->finish();
     }
@@ -279,7 +297,8 @@ class Get {
      * @param string $router Addr to send get request. example: github.com/sampleRouter
      * @since 0.1.0
      */
-    public function get_data_as_json(string $router) {
+    public function get_data_as_json(string $router)
+    {
         $response = $this->get_data($router);
 
         if (!$response) throw new Error("Response is null");
@@ -291,7 +310,8 @@ class Get {
 /**
  * Github API
  */
-class GithubApi {
+class GithubApi
+{
     /**
      * Github api url
      */
@@ -316,7 +336,8 @@ class GithubApi {
      * When class creates
      * @since 0.1.0
      */
-    function __construct(string $repo = "", string $username = "") {
+    function __construct(string $repo = "", string $username = "")
+    {
         $this->repository = $repo;
         $this->username = $username;
         $this->get = new Get($this->url);
@@ -327,11 +348,12 @@ class GithubApi {
      * @since 0.1.0
      * @since 0.1.3 Removed Unnecessary variable
      */
-    public function get_repo_releases() {
+    public function get_repo_releases()
+    {
         $username = $this->username;
         $repo = $this->repository;
 
-        if(empty($username) && empty($repo)) return array("message" => "Error");
+        if (empty($username) && empty($repo)) return array("message" => "Error");
 
         return $this->get->get_data_as_json("/repos/$this->username/$this->repository/releases");
     }
@@ -343,14 +365,16 @@ class GithubApi {
      * @return AssetFile
      * @since 0.1.0
      */
-    public function get_latest_release_asset(int $assetIndex, int $sizeLimit): AssetFile {
+    public function get_latest_release_asset(int $assetIndex, int $sizeLimit): AssetFile
+    {
         $latest = $this->get_repo_releases();
 
         $file_addr = $latest[0]->assets[$assetIndex]->browser_download_url;
         $file_type = $latest[0]->assets[$assetIndex]->content_type;
         $file_size = $latest[0]->assets[$assetIndex]->size;
 
-        if ($file_size > $sizeLimit) {
+        if ($file_size > $sizeLimit)
+        {
             // Error
             exit("Error: Asset file size is bigger than limit.");
         }
@@ -380,7 +404,8 @@ trait Path
 /**
  * Handle plugin update
  */
-class Update {
+class Update
+{
     use Converter;
     use Path;
 
@@ -401,7 +426,8 @@ class Update {
      * @param string $repo
      * @since 0.1.0
      */
-    function __construct(string $current_version, string $username, string $repo) {
+    function __construct(string $current_version, string $username, string $repo)
+    {
         $this->plugin_version = $current_version;
         $this->api = new GitHubApi($repo, $username);
     }
@@ -411,8 +437,10 @@ class Update {
      * If $version deferent than $this->plugin_version then return true, if not return false.
      * @since 0.1.0
      */
-    private function check_version(string $version): bool {
-        if ($this->plugin_version !== $version) {
+    private function check_version(string $version): bool
+    {
+        if ($this->plugin_version !== $version)
+        {
             return true;
         }
 
@@ -424,7 +452,8 @@ class Update {
      * @since 0.1.0
      * @return array 
      */
-    public function check_update(): array {
+    public function check_update(): array
+    {
         $version = $this->api->get_repo_releases()[0]->tag_name;
 
         if ($this->check_version($version)) return array($version, true);
@@ -435,7 +464,8 @@ class Update {
      * Download version and extract zip to plugin dir
      * @since 0.1.4
      */
-    public function upgrade(): void {
+    public function upgrade(): void
+    {
         global $dir; // Plugin dir
 
         $result_folder = $this->lastFolderName($dir);
@@ -454,7 +484,8 @@ class Update {
 
         $res = $zip->open($newFilePath);
 
-        if ($res === TRUE) {
+        if ($res === TRUE)
+        {
             echo "Zip file opened.\n";
             echo "Zip file extracted.\n";
             try
@@ -462,12 +493,13 @@ class Update {
                 $zip->extractTo($pluginPath);
                 $zip->close();
             }
-            catch(Error $ex)
+            catch (Error $ex)
             {
                 echo $ex->fullErrorMessage();
             }
         }
-        else {
+        else
+        {
             echo "ERROR :" . $res;
         }
 
