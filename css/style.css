@@ -225,9 +225,10 @@ body {
     margin: 0;
 }
 
-body.home {
+/* @since 0.1.6 */
+/* body.home {
     background: var(--wp--preset--color--home--background);
-}
+} */
 
 /* body.home .wp-site-blocks main { */
     /* padding-left: 30px !important; */
