@@ -3,6 +3,10 @@
 */
 
 @media (max-width: 600px) {
+    body .wp-site-blocks header div * {
+        justify-content: initial !important;
+    }
+
     .wp-site-blocks div.wp-block-navigation__responsive-container {
         display: flex !important;
         width: 13rem;
