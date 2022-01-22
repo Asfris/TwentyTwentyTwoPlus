@@ -341,6 +341,11 @@ figcaption {
     Custom classes
 */
 
+/* @since 0.1.5 */
+.group-justify-center {
+    justify-content: center !important;
+}
+
 .box-br-s {
     overflow: hidden;
     border-radius: 16px;
