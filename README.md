@@ -1,6 +1,6 @@
 # TwentyTwentyTwoPlus Plugin
 
-Css classes : [class.txt](https://asfris.github.io/TwentyTwentyTwoPlus/class.txt)
+Css classes : [class.txt](https://raw.githubusercontent.com/Asfris/TwentyTwentyTwoPlus/main/class.txt)
 
 # Build project
 
