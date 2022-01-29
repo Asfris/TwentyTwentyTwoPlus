@@ -1,0 +1,8 @@
+/*
+    WP_gallery block styles
+*/
+
+.wp-block-gallery * {
+    margin-right: 1px !important;
+    margin-left: 1px !important;
+}
