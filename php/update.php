@@ -375,8 +375,7 @@ class GithubApi
 
         if ($file_size > $sizeLimit)
         {
-            // Error
-            exit("Error: Asset file size is bigger than limit.");
+            throw new Error("Asset file size is bigger than limit.");
         }
 
         return new AssetFile($file_addr, $file_type, $file_size);
@@ -406,8 +405,7 @@ trait Path
  */
 class Update
 {
-    use Converter;
-    use Path;
+    use Converter, Path;
 
     /**
      * Current version of plugin

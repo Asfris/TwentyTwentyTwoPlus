@@ -15,11 +15,6 @@ import "../css/style.css";
 const delClass = (element, className) => element.classList.remove(className);
 
 /**
- * @description New Switch object
- */
-const sw = (elem) => new Switch({ element: elem });
-
-/**
  * @function
  * @name changeState
  * @returns void changes state
@@ -41,13 +36,16 @@ const btn = (swit) =>
 const closeNav = (obj) => obj.map((item) => delClass(item.element, item.class));
 
 /**
- * This function runst when script enjected
+ * This function runst when script injected
  */
 const main = () => {
     const element = document.querySelector("body");
-    let swit = sw(element);
-    swit.changeTheme(localStorage.getItem("theme"));
-    btn(swit);
+
+    if(Switch.switchExist()){
+        let swit = new Switch({ element: element });
+        swit.changeTheme(localStorage.getItem("theme"));
+        btn(swit);
+    }
 
     /**
      * @name bodyClick
@@ -66,6 +64,11 @@ const main = () => {
         ];
         switch (event.target) {
             case document.body:
+                closeNav(navClasses);
+                break;
+                
+            /// Any Link click ?
+            case document.querySelector('nav .has-modal-open span'):
                 closeNav(navClasses);
                 break;
 
