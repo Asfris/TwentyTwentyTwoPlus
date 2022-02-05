@@ -8,6 +8,7 @@
 @import "./footer.css";
 @import "./main.css";
 @import "./woocommerce/woocommerce.css";
+@import "./wp_blocks/style.css";
 
 /*
     Import fonts
@@ -182,7 +183,7 @@ body.light {
     --wp--preset--font-size--medium: 1.75rem !important;
     --wp--preset--font-size--large: clamp(1.75rem, 3vw, 2.25rem) !important;
     --wp--preset--font-size--huge: clamp(2.5rem, 4vw, 3rem) !important;
-    --wp--preset--font-family--system-font: "Sans",sans-serif !important;
+    --wp--preset--font-family--system-font: "Sans", sans-serif !important;
     --wp--preset--font-family--source-serif-pro: "Source Serif Pro", serif !important;
     --wp--custom--spacing--small: max(1.25rem, 5vw) !important;
     --wp--custom--spacing--medium: clamp(
@@ -219,6 +220,9 @@ body.light {
 html {
     /* FIXES bug */
     height: 100%; /* Why ? */
+
+    /* @since 0.1.6 */
+    scroll-behavior: smooth;
 }
 
 body {
@@ -231,8 +235,8 @@ body {
 } */
 
 /* body.home .wp-site-blocks main { */
-    /* padding-left: 30px !important; */
-    /* padding-right: 30px !important; */
+/* padding-left: 30px !important; */
+/* padding-right: 30px !important; */
 /* } */
 
 body.home .wp-site-blocks main * {
@@ -258,7 +262,7 @@ input,
 textarea,
 select {
     background: none;
-    border: 0.1rem solid #7d7d7d52!important;
+    border: 0.1rem solid #7d7d7d52 !important;
     color: var(--wp--preset--color--foreground);
     padding: 7px;
     border-radius: 2px;
@@ -294,12 +298,12 @@ td {
 .wp-block-post-title {
     margin-top: 3rem !important;
     margin-bottom: 3rem !important;
-    font-size: 2rem!important;
+    font-size: 2rem !important;
 }
 
 @media (max-width: 782px) {
     .wp-block-post-title {
-        font-size: 1.5rem!important;
+        font-size: 1.5rem !important;
     }
 }
 
@@ -309,13 +313,16 @@ ins {
 
 span.select2-dropdown {
     background-color: var(--wp--preset--color--background);
-} 
+}
 
-.select2-container--default .select2-results__option[data-selected=true] {
+.select2-container--default .select2-results__option[data-selected="true"] {
     background: rgba(148, 148, 148, 0.26) !important;
 }
 
-.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[data-selected] {
+.select2-container--default
+    .select2-results__option--highlighted[aria-selected],
+.select2-container--default
+    .select2-results__option--highlighted[data-selected] {
     background-color: #a7a7a747 !important;
     color: var(--wp--preset--color--foreground) !important;
 }
