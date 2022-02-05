@@ -220,6 +220,9 @@ body.light {
 html {
     /* FIXES bug */
     height: 100%; /* Why ? */
+
+    /* @since 0.1.6 */
+    scroll-behavior: smooth;
 }
 
 body {
