@@ -363,6 +363,7 @@ class GithubApi
      * @param int $sizeLimit
      * @return AssetFile
      * @since 0.1.0
+     * @since 0.1.6 Error replaced to exit
      */
     public function get_latest_release_asset(int $assetIndex, int $sizeLimit): AssetFile
     {
