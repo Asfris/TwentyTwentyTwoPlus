@@ -3,7 +3,6 @@
 namespace Update;
 
 use ErrorHandle\Error;
-use Exception;
 use ZipArchive;
 
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
@@ -112,7 +111,7 @@ class Request
     public function set_method(string $method): void
     {
         if ($method !== "POST" && $method !== "GET" && $method !== "PUT" && $method !== "DELETE")
-            throw new Exception($method . " not defined in methods list.");
+            throw new Error($method . " not defined in methods list.");
 
         $this->method = $method;
     }
@@ -364,6 +363,7 @@ class GithubApi
      * @param int $sizeLimit
      * @return AssetFile
      * @since 0.1.0
+     * @since 0.1.6 Error replaced to exit
      */
     public function get_latest_release_asset(int $assetIndex, int $sizeLimit): AssetFile
     {
