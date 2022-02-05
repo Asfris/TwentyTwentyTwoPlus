@@ -406,8 +406,7 @@ trait Path
  */
 class Update
 {
-    use Converter;
-    use Path;
+    use Converter, Path;
 
     /**
      * Current version of plugin

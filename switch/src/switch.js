@@ -12,7 +12,7 @@ const themes = { DARK: "dark", LIGHT: "light", SYSTEM: "system" };
  * @name storageCheck
  * @description Reads localStorage and check if option is exists
  * @param {any} option
- * @param {any} value 
+ * @param {any} value
  * @returns void
  */
 const storageCheck = (option, value) =>
@@ -37,7 +37,7 @@ export class Switch {
 	 * @type Element
 	 */
 	element;
-	
+
 	/**
 	 * @class
 	 * @param {Element} element for apply theme
@@ -46,7 +46,7 @@ export class Switch {
 	constructor({ element }) {
 		// When class created
 		this.element = element;
-		
+
 		storageCheck("theme", themes.SYSTEM);
 
 		element.classList.add(window.localStorage.getItem("theme"))
@@ -61,7 +61,7 @@ export class Switch {
 	static formStorage({ element }) {
 		// Get theme from storage
 		let result = new Switch({ element });
-		
+
 		storageCheck("theme", themes.SYSTEM);
 
 		result.state = localStorage.getItem('theme');
@@ -72,7 +72,7 @@ export class Switch {
 	set state(theme) {
 		this.state = theme;
 	}
-	
+
 	/**
 	 * @name autoChangeState
 	 * @description Change state of theme auto
@@ -84,7 +84,7 @@ export class Switch {
 			case DARK:
 				this.changeTheme(LIGHT);
 				break;
-			
+
 			case LIGHT:
 				this.changeTheme(SYSTEM);
 				break;
@@ -107,5 +107,13 @@ export class Switch {
 		this.element.classList.replace(this.state, state);
 		window.localStorage.setItem('theme', state);
 		this.state = state;
+	}
+
+	/**
+	 * @description Return switch element exist
+	 * @returns {boolean}
+	 */
+	static switchExist() {
+		return document.getElementById('switch-btn') !== null;
 	}
 }
