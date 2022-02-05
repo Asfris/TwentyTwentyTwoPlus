@@ -15,10 +15,10 @@
 	},
 	"dependencies": {
 		"@wordpress/block-editor": "^8.1.0",
-		"@wordpress/blocks": "^11.1.5",
+		"@wordpress/blocks": "^11.2.0",
 		"@wordpress/i18n": "^4.3.0"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^19.2.3"
+		"@wordpress/scripts": "^20.0.1"
 	}
 }
