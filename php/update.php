@@ -3,7 +3,6 @@
 namespace Update;
 
 use ErrorHandle\Error;
-use Exception;
 use ZipArchive;
 
 const ASSET_FILE_SIZE_LIMIT = 2; // AS MEGABYTE
@@ -112,7 +111,7 @@ class Request
     public function set_method(string $method): void
     {
         if ($method !== "POST" && $method !== "GET" && $method !== "PUT" && $method !== "DELETE")
-            throw new Exception($method . " not defined in methods list.");
+            throw new Error($method . " not defined in methods list.");
 
         $this->method = $method;
     }
