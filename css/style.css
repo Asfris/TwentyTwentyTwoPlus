@@ -414,3 +414,15 @@ figcaption {
 .box-m-u4:hover {
     transform: translateY(-4px);
 }
+
+@media screen and (max-width: 882px) {
+    .display-none-tablet {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .display-none-mobile {
+        display: none !important;
+    }
+}
