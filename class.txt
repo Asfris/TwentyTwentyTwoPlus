@@ -2,10 +2,10 @@
 
 .box-br               --->   Adds border radius (br=16px)
 
-.box-s-1               --->   Adds shadow (s=[ 0 0 15px #7d7d7d90 ])
-.box-s-2               --->   Adds shadow (s=[ rgb(136 165 191 / 48%) 6px 2px 16px 0px, rgb(255 255 255 / 80%) -6px -2px 16px 0px ])
-.box-s-3               --->   Adds shadow (s=[ rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px ])
-.box-s-4               --->   Adds shadow (s=[ rgb(17 17 26 / 10%) 0px 4px 16px, rgb(17 17 26 / 5%) 0px 8px 32px ])
+.box-s-1              --->   Adds shadow (s=[ 0 0 15px #7d7d7d90 ])
+.box-s-2              --->   Adds shadow (s=[ rgb(136 165 191 / 48%) 6px 2px 16px 0px, rgb(255 255 255 / 80%) -6px -2px 16px 0px ])
+.box-s-3              --->   Adds shadow (s=[ rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px ])
+.box-s-4              --->   Adds shadow (s=[ rgb(17 17 26 / 10%) 0px 4px 16px, rgb(17 17 26 / 5%) 0px 8px 32px ])
 
 .box-t                --->   Adds transition (t=[ all 0.2s ])
 
@@ -14,3 +14,6 @@
 .box-m-u$v            --->   Adds transform -$v, $v= 2 | 3 | 4
 
 .group-justify-center --->   Adds justify: center;
+
+.display-none-mobile  --->   Display none in mobile view
+.display-none-tablet  --->   Display none in tablet view 
