@@ -14,11 +14,6 @@ body .wp-site-blocks footer {
     margin-top: 5rem;
 }
 
-body .wp-site-blocks footer * {
-    /* max-width: 1000px !important; */
-    text-align: justify;
-}
-
 body .wp-site-blocks footer a {
     color: var(--wp--preset--color--link);
     text-decoration: none;

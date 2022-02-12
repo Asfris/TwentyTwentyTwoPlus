@@ -58,8 +58,7 @@ add_action('admin_menu', 'register_menu');
  */
 function menu_page(): void
 {
-    $file_name = "php/menu.php";
-    include_once plugin_dir_path(__FILE__) . $file_name;
+    include_once plugin_dir_path(__FILE__) . "php/menu.php";
 }
 
 /**
