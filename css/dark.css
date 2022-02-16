@@ -5,15 +5,12 @@
     body {
         --wp--preset--color--foreground: #ffffff !important;
         --wp--preset--color--background: #121212 !important;
-        /* --wp--preset--color--header--background: #222222 !important;
-        --wp--preset--color--footer--background: #222222 !important; */
         --wp--preset--color--block--background: #222222 !important;
         --wp--preset--color--home--background: #222222 !important;
 
         /*
             WC
         */
-        /* --wp--wc--product--color--background: #222222; */
         --wp--wc--product--border: solid 1px rgba(105, 105, 105, 0.199);
     }
 }
@@ -21,14 +18,11 @@
 body.dark {
     --wp--preset--color--foreground: #ffffff !important;
     --wp--preset--color--background: #121212 !important;
-    /* --wp--preset--color--header--background: #222222 !important;
-    --wp--preset--color--footer--background: #222222 !important; */
     --wp--preset--color--block--background: #222222 !important;
     --wp--preset--color--home--background: #121212 !important;
 
     /*
         WC
     */
-    /* --wp--wc--product--color--background: #222222; */
     --wp--wc--product--border: solid 1px rgba(105, 105, 105, 0.199);
 }

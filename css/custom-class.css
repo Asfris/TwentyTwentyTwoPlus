@@ -1,0 +1,81 @@
+/*
+    Custom classes
+*/
+
+/* @since 0.1.5 */
+.group-justify-center {
+    justify-content: center !important;
+}
+
+.box-br-s {
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 0 15px #7d7d7d90;
+}
+
+/*
+    Add radius to box
+*/
+.box-br {
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+/*
+    Adds shadow to box
+ */
+.box-s-1 {
+    box-shadow: 0 0 15px #7d7d7d90;
+}
+
+.box-s-2 {
+    box-shadow: rgb(136 165 191 / 48%) 6px 2px 16px 0px,
+        rgb(255 255 255 / 80%) -6px -2px 16px 0px;
+}
+
+.box-s-3 {
+    box-shadow: rgb(0 0 0 / 25%) 0px 14px 28px, rgb(0 0 0 / 22%) 0px 10px 10px;
+}
+
+.box-s-4 {
+    box-shadow: rgb(17 17 26 / 10%) 0px 4px 16px,
+        rgb(17 17 26 / 5%) 0px 8px 32px;
+}
+
+/*
+    Adds transition to box
+ */
+.box-t {
+    transition: all 0.2s;
+}
+
+/*
+    Move box up 1 px
+ */
+.box-m-u:hover {
+    transform: translateY(-1px);
+}
+
+.box-m-u2:hover {
+    transform: translateY(-2px);
+}
+
+.box-m-u3:hover {
+    transform: translateY(-3px);
+}
+
+.box-m-u4:hover {
+    transform: translateY(-4px);
+}
+
+@media screen and (max-width: 882px) {
+    .display-none-tablet {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .display-none-mobile {
+        display: none !important;
+    }
+}

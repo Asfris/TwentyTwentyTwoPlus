@@ -5,9 +5,12 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-body div.wp-block-create-block-switch svg {
-	display: none;
-	cursor: pointer;
+body div.wp-block-create-block-switch {
+	svg {
+		display: none;
+		cursor: pointer;
+		fill: var(--wp--preset--color--foreground);
+	}
 }
 
 body.light div.wp-block-create-block-switch svg#light-mode-icon {
