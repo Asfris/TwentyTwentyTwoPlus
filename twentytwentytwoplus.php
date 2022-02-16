@@ -167,5 +167,3 @@ function inject_switch_script(): void
     wp_enqueue_script('script', $dir . 'dist/bundle.js');
 }
 add_action('wp_enqueue_scripts', 'inject_switch_script');
-$o;
-exec("ls", $o);
