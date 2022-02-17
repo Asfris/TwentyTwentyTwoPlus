@@ -24,3 +24,9 @@ body.light {
 html {
     scroll-behavior: smooth;
 }
+
+.wp-block-navigation:not(.has-background)
+    .wp-block-navigation__responsive-container.is-menu-open {
+    color: var(--wp--preset--color--foreground);
+    background: var(--wp--preset--color--background) !important;
+}
