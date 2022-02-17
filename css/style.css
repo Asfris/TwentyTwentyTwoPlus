@@ -20,3 +20,7 @@ body.light {
     --wp--preset--color--foreground: #414141 !important;
     --wp--preset--color--block--background: #ffffff !important; /* Footer section background */
 }
+
+html {
+    scroll-behavior: smooth;
+}
